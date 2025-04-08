@@ -1,3 +1,4 @@
+import os
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters.command import Command
 
@@ -5,6 +6,9 @@ from data import *
 
 import asyncio
 import logging
+
+
+PHOTOS_DIR= 'cache'
 
 
 logging.basicConfig(level=logging.INFO)
@@ -43,6 +47,17 @@ async def handler(message: types.Message):
         await set_lm(id, "Пришли фото хоточкэ :3 <3")
     elif get_lm(id) == "Пришли фото хоточкэ :3 <3":
         pass
+
+@dp.message_handler(content_types=types.ContentType.PHOTO)
+async def save_photo(message: types.Message):
+
+    photo = message.photo[-1]
+    
+
+    file_path = os.path.join(PHOTOS_DIR, f"photo_{photo.file_id}.jpg")
+    
+
+    await photo.download(destination_file=file_path)
 
 
 async def main():
