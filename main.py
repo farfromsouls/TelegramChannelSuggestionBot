@@ -12,7 +12,7 @@ dp = Dispatcher()
 
 @dp.message(Command("start"))
 async def cmd_start(message: types.Message):
-    await message.answer("")
+    await message.answer("Здравствуйте напишите бренд")
 
 
 @dp.message()
@@ -20,7 +20,12 @@ async def handler(message: types.Message):
     id = message.from_user.id
     text = message.text
 
-    await bot.send_message(id, "тест")
+    if get_lm() == "":
+        set_name()
+        bot.send_message("")
+
+    if 
+
 
 
 async def main():
