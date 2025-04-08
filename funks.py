@@ -28,7 +28,14 @@ def changes(brend, name, overview, price):
 
 
 
-
+def AdmAnsw(adminans):
+    if adminans == 'Да':
+        #выслать сообщ в канал
+        #отчистить кэшэчек
+        
+    else:
+        #выслать сообщение отправителю об отказе
+        # отчистить кэшэчек
 
 
 
