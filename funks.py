@@ -24,12 +24,3 @@ def changes(brend, name, overview, price):
         print("неправильный ввод")
         return
     Announc(brend, name, overview, price)
-
-
-
-
-
-
-
-
-
