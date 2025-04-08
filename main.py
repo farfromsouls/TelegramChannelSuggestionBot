@@ -4,13 +4,20 @@ from aiogram.filters.command import Command
 import asyncio
 import logging
 
-from .handler import *
-
 
 logging.basicConfig(level=logging.INFO)
-bot = Bot(token="TG_TOKEN")
+bot = Bot(token="7594575966:AAHFZnAmIR5cAWUYB-xCwSXxnsX5OcihonE")
 dp = Dispatcher()
 
+@dp.message(Command("start"))
+async def cmd_start(message: types.Message):
+    await message.answer("")
+
+@dp.message()
+async def handler(message: types.Message):
+
+    id = message.from_user.id
+    text = message.text
 
 async def main():
     await dp.start_polling(bot)
