@@ -4,12 +4,13 @@ from aiogram.filters.command import Command
 
 from data import *
 from secret import token
+from buttons import testbtn
 
 import asyncio
 import logging
 
 
-PHOTOS_DIR= 'cache'
+PHOTOS_DIR= '.cache'
 
 
 logging.basicConfig(level=logging.INFO)
@@ -46,20 +47,15 @@ async def handler(message: types.Message):
         await set_price(id, text)
         await bot.send_message(id, "Пришли фото хоточкэ :3 <3")
         await set_lm(id, "Пришли фото хоточкэ :3 <3")
-    elif get_lm(id) == "Пришли фото хоточкэ :3 <3":
-        text = Announc(get_brand(id),get_name(id),get_overview(id),get_price(id))
-        await bot.send_message(id, text)
+        
 
 @dp.message(F.photo)
 async def save_photo(message: types.Message):
-
     photo = message.photo[-1]
-    
-
     file_path = os.path.join(PHOTOS_DIR, f"photo_{photo.file_id}.jpg")
-    
-
     await photo.download(destination_file=file_path)
+    text = Announc(get_brand(id), get_name(id), get_overview(id), get_price(id))
+    await bot.send_message(id, text, reply_markup=testbtn)
 
 
 async def main():
