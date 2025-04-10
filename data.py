@@ -42,6 +42,11 @@ async def set_lm(id, text):
     conn.commit()
 
 
+async def set_lastchm(id, text):
+    cursor.execute('UPDATE Users SET last_message = ? WHERE id = ?', (text, id))
+    conn.commit()
+
+
 async def set_brand(id, text):
     cursor.execute('UPDATE Users SET brand = ? WHERE id = ?', (text, id))
     conn.commit()
@@ -84,6 +89,13 @@ def get_price(id):
     cursor.execute('SELECT price FROM Users WHERE id = ?', (id,))
     price = cursor.fetchone()[0]
     return price
+
+
+def get_lastchm(id):
+    cursor.execute('SELECT last_message FROM Users WHERE id = ?', (id,))
+    lastchm = cursor.fetchone()[0]
+    return lastchm
+
 
 def Announc(brend, name, overview, price):
     global textmess
