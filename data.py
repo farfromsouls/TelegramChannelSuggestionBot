@@ -91,4 +91,4 @@ def Announc(brend, name, overview, price):
                  f'Название: {name} \n'
                  f'Описание: {overview} \n'
                  f'Цена: {price} \n')
-    print(textmess)
+    return textmess
