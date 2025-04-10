@@ -68,7 +68,7 @@ async def areusure(id, message):
     text = await Announc(get_brand(id), get_name(id), get_overview(id), get_price(id))
     photo = await get_photo(id)
     image_from_pc = FSInputFile(photo)
-    await message.answer_photo(image_from_pc, caption=text)
+    await message.answer_photo(image_from_pc, caption=text, reply_markup=testbtn)
 
 
 async def main():
