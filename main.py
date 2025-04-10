@@ -10,6 +10,7 @@ from buttons import testbtn
 import asyncio
 import logging
 
+
 PHOTOS_DIR = '.cache'
 
 
@@ -61,15 +62,9 @@ async def download_photo(message: types.Message):
     )
 
     await set_photo(id, dest)
-    await areusure(id, message)
-
-
-async def areusure(id, message):
     text = await Announc(get_brand(id), get_name(id), get_overview(id), get_price(id))
-    photo = await get_photo(id)
-    image_from_pc = FSInputFile(photo)
-    await message.answer_photo(image_from_pc, caption=text, reply_markup=testbtn)
-
+    await bot.send_message(id, text)
+    await get_lastchm(id)
 
 async def main():
     await dp.start_polling(bot)
