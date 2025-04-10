@@ -15,7 +15,8 @@ name TEXT,
 brand TEXT,
 price INTEGER,
 description TEXT,
-photo TEXT)''')
+photo TEXT,
+last_message TEXT)''')
 
 
 def check_id(id):
@@ -84,6 +85,10 @@ def get_price(id):
     cursor.execute('SELECT price FROM Users WHERE id = ?', (id,))
     price = cursor.fetchone()[0]
     return price
+
+def set_photo(id, link):
+    cursor.execute('UPDATE Users SET photo = ? WHERE id = ?', (link, id))
+    conn.commit()
 
 def Announc(brend, name, overview, price):
     global textmess
