@@ -47,6 +47,8 @@ async def handler(message: types.Message):
         await set_lm(id, "Пришли фото хоточкэ :3 <3")
     elif get_lm(id) == "Пришли фото хоточкэ :3 <3":
         pass
+    
+    Announc(get_brand(id),get_name(id),get_overview(id),get_price(id))
 
 @dp.message_handler(content_types=types.ContentType.PHOTO)
 async def save_photo(message: types.Message):
