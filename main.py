@@ -3,6 +3,7 @@ from aiogram import Bot, Dispatcher, types
 from aiogram.filters.command import Command
 
 from data import *
+from secret import token
 
 import asyncio
 import logging
@@ -12,7 +13,7 @@ PHOTOS_DIR= 'cache'
 
 
 logging.basicConfig(level=logging.INFO)
-bot = Bot(token="7594575966:AAHFZnAmIR5cAWUYB-xCwSXxnsX5OcihonE")
+bot = Bot(token)
 dp = Dispatcher()
 
 
