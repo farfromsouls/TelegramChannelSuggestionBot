@@ -1,12 +1,12 @@
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 
-test1 = KeyboardButton(text="")
-test2 = KeyboardButton(text="")
-test3 = KeyboardButton(text="")
-test4 = KeyboardButton(text="")
-test5 = KeyboardButton(text="")
-test6 = KeyboardButton(text="")
+test1 = KeyboardButton(text="Бренд")
+test2 = KeyboardButton(text="Название")
+test3 = KeyboardButton(text="Описание")
+test4 = KeyboardButton(text="Цена")
+test5 = KeyboardButton(text="Фото")
+test6 = KeyboardButton(text="Оставить анкету такой")
 
 testbtn = ReplyKeyboardMarkup(keyboard=[
     [test1, test2],

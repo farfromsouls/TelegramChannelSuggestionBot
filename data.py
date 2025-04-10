@@ -90,5 +90,24 @@ def Announc(brend, name, overview, price):
     textmess = (f'Бренд: {brend} \n'
                  f'Название: {name} \n'
                  f'Описание: {overview} \n'
-                 f'Цена: {price} \n')
+                 f'Цена: {price} \n\n\n'
+                 f'Хотите внести изменения? \n')
     return textmess
+
+async def changes(text):   
+    if text == "Бренд":
+        await bot.send_message(id, "Напиши Бренд ")
+        await set_brand(id, "Напиши название ")       
+    elif text == "Название":
+        await bot.send_message(id, "Напиши название ")
+        await set_name(id, "Напиши название ")  
+    elif text == "Описание":
+        await bot.send_message(id, "Напиши Бренд ")
+        await set_ove(id, "Напиши название ")  
+    elif text == "Цена":
+        await bot.send_message(id, "Напиши Бренд ")
+        await set_price(id, "Напиши название ") 
+    else:
+        print("неправильный ввод")
+        return
+    Announc(get_brand(id), get_name(id), get_overview(id), get_price(id))
