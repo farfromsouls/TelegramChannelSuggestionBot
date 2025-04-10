@@ -118,26 +118,22 @@ async def Announc(brend, name, overview, price):
 
 async def changes(id):   
     if get_lastchm(id) == "Бренд":
-        await bot.send_message(id, "Напиши бренд ")
         await set_brand(id, text)
         text = await Announc(get_brand(id), get_name(id), get_overview(id), get_price(id))
         await bot.send_message(id, text)       
-    elif get_lastchm == "Название":
-        await bot.send_message(id, "Напиши название ")
+    elif get_lastchm(id) == "Название":
         await set_name(id, text)  
         text = await Announc(get_brand(id), get_name(id), get_overview(id), get_price(id))
         await bot.send_message(id, text)
-    elif get_lastchm == "Описание":
-        await bot.send_message(id, "Напиши описание ")
+    elif get_lastchm(id) == "Описание":
         await set_ove(id, text) 
         text = await Announc(get_brand(id), get_name(id), get_overview(id), get_price(id))
         await bot.send_message(id, text) 
-    elif get_lastchm == "Цена":
-        await bot.send_message(id, "Напиши цену ")
+    elif get_lastchm(id) == "Цена":
         await set_price(id, text) 
         text = await Announc(get_brand(id), get_name(id), get_overview(id), get_price(id))
         await bot.send_message(id, text)
-    elif get_lastchm == "Оставить анкету такой":
+    elif get_lastchm(id) == "Оставить анкету такой":
         #функ для отправки админу
         print("ян лох")
     else:
