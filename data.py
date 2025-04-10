@@ -101,8 +101,6 @@ async def get_photo(id):
     cursor.execute('SELECT photo FROM Users WHERE id = ?', (id,))
     photo = cursor.fetchone()[0]
     return photo
-
-
 def get_lastchm(id):
     cursor.execute('SELECT last_message FROM Users WHERE id = ?', (id,))
     lastchm = cursor.fetchone()[0]
@@ -118,19 +116,31 @@ async def Announc(brend, name, overview, price):
                  f'Хотите внести изменения? \n')
     return textmess
 
-async def changes(text):   
-    if text == "Бренд":
-        await bot.send_message(id, "Напиши Бренд ")
-        await set_brand(id, "Напиши название ")       
-    elif text == "Название":
+async def changes(id):   
+    if get_lastchm(id) == "Бренд":
+        await bot.send_message(id, "Напиши бренд ")
+        await set_brand(id, text)
+        text = await Announc(get_brand(id), get_name(id), get_overview(id), get_price(id))
+        await bot.send_message(id, text)       
+    elif get_lastchm == "Название":
         await bot.send_message(id, "Напиши название ")
-        await set_name(id, "Напиши название ")  
-    elif text == "Описание":
-        await bot.send_message(id, "Напиши Бренд ")
-        await set_ove(id, "Напиши название ")  
-    elif text == "Цена":
-        await bot.send_message(id, "Напиши Бренд ")
-        await set_price(id, "Напиши название ") 
+        await set_name(id, text)  
+        text = await Announc(get_brand(id), get_name(id), get_overview(id), get_price(id))
+        await bot.send_message(id, text)
+    elif get_lastchm == "Описание":
+        await bot.send_message(id, "Напиши описание ")
+        await set_ove(id, text) 
+        text = await Announc(get_brand(id), get_name(id), get_overview(id), get_price(id))
+        await bot.send_message(id, text) 
+    elif get_lastchm == "Цена":
+        await bot.send_message(id, "Напиши цену ")
+        await set_price(id, text) 
+        text = await Announc(get_brand(id), get_name(id), get_overview(id), get_price(id))
+        await bot.send_message(id, text)
+    elif get_lastchm == "Оставить анкету такой":
+        #функ для отправки админу
+        print("ян лох")
     else:
-        print("неправильный ввод")
+        await bot.send_message(id, "Неправильный ввод ")
+
         
