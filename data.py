@@ -97,6 +97,12 @@ async def set_photo(id, link):
     conn.commit()
 
 
+async def get_photo(id):
+    cursor.execute('SELECT photo FROM Users WHERE id = ?', (id,))
+    photo = cursor.fetchone()[0]
+    return photo
+
+
 def get_lastchm(id):
     cursor.execute('SELECT last_message FROM Users WHERE id = ?', (id,))
     lastchm = cursor.fetchone()[0]

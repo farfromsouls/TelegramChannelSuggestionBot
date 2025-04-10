@@ -1,5 +1,6 @@
 import os
 from aiogram import Bot, Dispatcher, types, F
+from aiogram.types import FSInputFile
 from aiogram.filters.command import Command
 
 from data import *
@@ -8,7 +9,6 @@ from buttons import testbtn
 
 import asyncio
 import logging
-
 
 PHOTOS_DIR = '.cache'
 
@@ -56,13 +56,20 @@ async def download_photo(message: types.Message):
     dest = f"tmp/{photo.file_id}.jpg"
 
     await bot.download(
-        file = photo,
+        file=photo,
         destination=dest,
     )
 
     await set_photo(id, dest)
+    await areusure(id, message)
+
+
+async def areusure(id, message):
     text = await Announc(get_brand(id), get_name(id), get_overview(id), get_price(id))
-    await bot.send_message(id, text)
+    photo = await get_photo(id)
+    image_from_pc = FSInputFile(photo)
+    await message.answer_photo(image_from_pc, caption=text)
+
 
 async def main():
     await dp.start_polling(bot)
