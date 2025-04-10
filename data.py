@@ -92,9 +92,7 @@ def get_price(id):
     return price
 
 
-
-
-def set_photo(id, link):
+async def set_photo(id, link):
     cursor.execute('UPDATE Users SET photo = ? WHERE id = ?', (link, id))
     conn.commit()
 
@@ -105,7 +103,7 @@ def get_lastchm(id):
     return lastchm
 
 
-def Announc(brend, name, overview, price):
+async def Announc(brend, name, overview, price):
     global textmess
     textmess = (f'Бренд: {brend} \n'
                  f'Название: {name} \n'
@@ -129,5 +127,4 @@ async def changes(text):
         await set_price(id, "Напиши название ") 
     else:
         print("неправильный ввод")
-        return
-    Announc(get_brand(id), get_name(id), get_overview(id), get_price(id))
+        

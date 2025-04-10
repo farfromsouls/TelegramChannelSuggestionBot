@@ -60,9 +60,9 @@ async def download_photo(message: types.Message):
         destination=dest,
     )
 
-    set_photo(id, dest)
-
-
+    await set_photo(id, dest)
+    text = await Announc(get_brand(id), get_name(id), get_overview(id), get_price(id))
+    await bot.send_message(id, text)
 
 async def main():
     await dp.start_polling(bot)
