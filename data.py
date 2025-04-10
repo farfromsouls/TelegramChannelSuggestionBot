@@ -60,3 +60,35 @@ async def set_ove(id, text):
 async def set_price(id, text):
     cursor.execute('UPDATE Users SET price = ? WHERE id = ?', (text, id))
     conn.commit()
+
+
+def get_brand(id):
+    cursor.execute('SELECT brand FROM Users WHERE id = ?', (id,))
+    brand = cursor.fetchone()[0]
+    return brand
+
+
+def get_name(id):
+    cursor.execute('SELECT name FROM Users WHERE id = ?', (id,))
+    name = cursor.fetchone()[0]
+    return name
+
+
+def get_overview(id):
+    cursor.execute('SELECT description FROM Users WHERE id = ?', (id,))
+    overview = cursor.fetchone()[0]
+    return overview
+
+
+def get_price(id):
+    cursor.execute('SELECT price FROM Users WHERE id = ?', (id,))
+    price = cursor.fetchone()[0]
+    return price
+
+def Announc(brend, name, overview, price):
+    global textmess
+    textmess = (f'Бренд: {brend} \n'
+                 f'Название: {name} \n'
+                 f'Описание: {overview} \n'
+                 f'Цена: {price} \n')
+    print(textmess)
