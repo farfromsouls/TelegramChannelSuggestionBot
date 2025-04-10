@@ -10,7 +10,7 @@ import asyncio
 import logging
 
 
-PHOTOS_DIR= '.cache'
+PHOTOS_DIR = '.cache'
 
 
 logging.basicConfig(level=logging.INFO)
@@ -23,7 +23,7 @@ async def cmd_start(message: types.Message):
     await message.answer("Здравствуйте напишите бренд")
 
 
-@dp.message()
+@dp.message(F.text)
 async def handler(message: types.Message):
     id = message.from_user.id
     text = message.text
@@ -47,15 +47,21 @@ async def handler(message: types.Message):
         await set_price(id, text)
         await bot.send_message(id, "Пришли фото хоточкэ :3 <3")
         await set_lm(id, "Пришли фото хоточкэ :3 <3")
-        
+
 
 @dp.message(F.photo)
-async def save_photo(message: types.Message):
+async def download_photo(message: types.Message):
+    id = message.from_user.id
     photo = message.photo[-1]
-    file_path = os.path.join(PHOTOS_DIR, f"photo_{photo.file_id}.jpg")
-    await photo.download(destination_file=file_path)
-    text = Announc(get_brand(id), get_name(id), get_overview(id), get_price(id))
-    await bot.send_message(id, text, reply_markup=testbtn)
+    dest = f"tmp/{photo.file_id}.jpg"
+
+    await bot.download(
+        file = photo,
+        destination=dest,
+    )
+
+    set_photo(id, dest)
+
 
 
 async def main():
