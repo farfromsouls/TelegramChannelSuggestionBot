@@ -48,6 +48,19 @@ async def handler(message: types.Message):
         await set_price(id, text)
         await bot.send_message(id, "Пришли фото хоточкэ :3 <3")
         await set_lm(id, "Пришли фото хоточкэ :3 <3")
+    
+
+    if text == "Бренд":
+        await bot.send_message(id, "Напиши бренд")
+    elif text == "Название":
+        await bot.send_message(id, "Напиши название")
+    elif text == "Описание":
+        await bot.send_message(id, "Напиши описание")
+    elif text == "Цена":
+        await bot.send_message(id, "Напиши цену")
+    elif text == "Фото":
+        #фото лол хз как
+    
 
 
 @dp.message(F.photo)
