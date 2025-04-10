@@ -1,5 +1,7 @@
 import sqlite3
 import datetime
+from aiogram.types import FSInputFile
+from buttons import testbtn
 
 # connecting to db
 db_path = 'db.sqlite3'
@@ -101,7 +103,8 @@ async def get_photo(id):
     cursor.execute('SELECT photo FROM Users WHERE id = ?', (id,))
     photo = cursor.fetchone()[0]
     return photo
-def get_lastchm(id):
+
+async def get_lastchm(id):
     cursor.execute('SELECT last_message FROM Users WHERE id = ?', (id,))
     lastchm = cursor.fetchone()[0]
     return lastchm
@@ -116,27 +119,23 @@ async def Announc(brend, name, overview, price):
                  f'Хотите внести изменения? \n')
     return textmess
 
-async def changes(id):   
-    if get_lastchm(id) == "Бренд":
-        await set_brand(id, text)
-        text = await Announc(get_brand(id), get_name(id), get_overview(id), get_price(id))
-        await bot.send_message(id, text)       
-    elif get_lastchm(id) == "Название":
+async def changes(id, text, message):   
+    lastchm = await get_lastchm(id)
+    
+    if lastchm == "Бренд":
+        await set_brand(id, text)     
+    elif lastchm == "Название":
         await set_name(id, text)  
-        text = await Announc(get_brand(id), get_name(id), get_overview(id), get_price(id))
-        await bot.send_message(id, text)
-    elif get_lastchm(id) == "Описание":
+    elif lastchm == "Описание":
         await set_ove(id, text) 
-        text = await Announc(get_brand(id), get_name(id), get_overview(id), get_price(id))
-        await bot.send_message(id, text) 
-    elif get_lastchm(id) == "Цена":
+    elif lastchm == "Цена":
         await set_price(id, text) 
-        text = await Announc(get_brand(id), get_name(id), get_overview(id), get_price(id))
-        await bot.send_message(id, text)
-    elif get_lastchm(id) == "Оставить анкету такой":
+    elif lastchm == "Оставить анкету такой":
         #функ для отправки админу
         print("ян лох")
-    else:
-        await bot.send_message(id, "Неправильный ввод ")
-
-        
+    
+    if lastchm in ["Бренд", "Название", "Описание", "Цена"]:
+        photo_file = FSInputFile(await get_photo(id))
+        text = await Announc(get_brand(id), get_name(id), get_overview(id), get_price(id))
+        await message.answer_photo(photo=photo_file, reply_markup=testbtn, caption=text)
+            

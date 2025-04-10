@@ -36,30 +36,45 @@ async def handler(message: types.Message):
         await set_brand(id, text)
         await bot.send_message(id, "Напиши название чмо")
         await set_lm(id, "Напиши название чмо")
+
     elif get_lm(id) == "Напиши название чмо":
         await set_name(id, text)
         await bot.send_message(id, "Напиши описание чмо")
         await set_lm(id, "Напиши описание чмо")
+
     elif get_lm(id) == "Напиши описание чмо":
         await set_ove(id, text)
         await bot.send_message(id, "Напиши цену товара")
         await set_lm(id, "Напиши цену товара")
+
     elif get_lm(id) == "Напиши цену товара":
         await set_price(id, text)
         await bot.send_message(id, "Пришли фото хоточкэ :3 <3")
         await set_lm(id, "Пришли фото хоточкэ :3 <3")
-    
 
-    if text == "Бренд":
+    elif text == "Бренд":
+        await set_lastchm(id, text)
         await bot.send_message(id, "Напиши бренд")
+
     elif text == "Название":
+        await set_lastchm(id, text)
         await bot.send_message(id, "Напиши название")
+
     elif text == "Описание":
+        await set_lastchm(id, text)
         await bot.send_message(id, "Напиши описание")
+
     elif text == "Цена":
+        await set_lastchm(id, text)
         await bot.send_message(id, "Напиши цену")
+
     elif text == "Фото":
-        #фото лол хз как
+        await set_lastchm(id, text)
+        await bot.send_message(id, "Пришли нью фоточкэ")
+
+    else:
+        await changes(id, text, message)
+    
     
 
 
@@ -69,6 +84,10 @@ async def download_photo(message: types.Message):
     photo = message.photo[-1]
     dest = f"tmp/{photo.file_id}.jpg"
 
+    link = await get_photo(id)
+    if link != None:
+        os.remove(link)
+
     await bot.download(
         file=photo,
         destination=dest,
@@ -76,7 +95,8 @@ async def download_photo(message: types.Message):
 
     await set_photo(id, dest)
     text = await Announc(get_brand(id), get_name(id), get_overview(id), get_price(id))
-    await bot.send_message(id, text)
+    photo_file = FSInputFile(dest)
+    await message.answer_photo(photo=photo_file, reply_markup=testbtn,caption=text)
     await get_lastchm(id)
 
 async def main():
