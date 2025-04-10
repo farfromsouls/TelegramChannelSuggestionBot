@@ -1,5 +1,5 @@
 import os
-from aiogram import Bot, Dispatcher, types
+from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters.command import Command
 
 from data import *
@@ -50,7 +50,7 @@ async def handler(message: types.Message):
         text = Announc(get_brand(id),get_name(id),get_overview(id),get_price(id))
         await bot.send_message(id, text)
 
-@dp.message_handler(content_types=types.ContentType.PHOTO)
+@dp.message(F.photo)
 async def save_photo(message: types.Message):
 
     photo = message.photo[-1]
