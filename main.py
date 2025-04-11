@@ -4,14 +4,11 @@ from aiogram.types import FSInputFile
 from aiogram.filters.command import Command
 
 from data import *
-from secret import token
-from buttons import testbtn
+from secret import token, admin_id
+from buttons import testbtn, adminbutt
 
 import asyncio
 import logging
-
-
-PHOTOS_DIR = '.cache'
 
 
 logging.basicConfig(level=logging.INFO)
@@ -29,25 +26,30 @@ async def handler(message: types.Message):
     id = message.from_user.id
     text = message.text
 
-    if check_id(id) == 0:
-        set_id(id)
+    if await check_id(id) == 0:
+        await set_id(id)
 
-    if get_lm(id) == None:
+    if await get_ia(id) == 1:
+        return None
+    
+    lastm = await get_lm(id)
+
+    if lastm == None:
         await set_brand(id, text)
         await bot.send_message(id, "Напишите название")
         await set_lm(id, "Напишите название")
 
-    elif get_lm(id) == "Напишите название":
+    elif lastm == "Напишите название":
         await set_name(id, text)
         await bot.send_message(id, "Напишите описание")
         await set_lm(id, "Напишите описание")
 
-    elif get_lm(id) == "Напишите описание":
+    elif lastm == "Напишите описание":
         await set_ove(id, text)
         await bot.send_message(id, "Напишите цену")
         await set_lm(id, "Напишите цену")
 
-    elif get_lm(id) == "Напишите цену":
+    elif lastm == "Напишите цену":
         await set_price(id, text)
         await bot.send_message(id, "Пришлите фото")
         await set_lm(id, "Пришлите фото")
@@ -72,9 +74,15 @@ async def handler(message: types.Message):
         await set_lastchm(id, text)
         await bot.send_message(id, "Пришлите фото")
 
+    elif text == "Оставить анкету такой✅":
+        await bot.send_message(id, "Ваша заявка обрабатывается")
+        post = await Announc(get_brand(id), get_name(id), get_overview(id), get_price(id), True)
+        photo_file = FSInputFile(await get_photo(id))
+        await bot.send_photo(chat_id=admin_id, photo=photo_file, reply_markup=adminbutt, caption=post)
+        await set_ia(id, 1)
+
     else:
         await changes(id, text, message)
-    
     
 
 
@@ -83,6 +91,9 @@ async def download_photo(message: types.Message):
     id = message.from_user.id
     photo = message.photo[-1]
     dest = f"tmp/{photo.file_id}.jpg"
+
+    if await get_ia(id) == 1:
+        return None
 
     link = await get_photo(id)
     if link != None:
@@ -96,7 +107,7 @@ async def download_photo(message: types.Message):
     await set_photo(id, dest)
     text = await Announc(get_brand(id), get_name(id), get_overview(id), get_price(id))
     photo_file = FSInputFile(dest)
-    await message.answer_photo(photo=photo_file, reply_markup=testbtn,caption=text)
+    await message.answer_photo(photo=photo_file, reply_markup=testbtn, caption=text)
     await get_lastchm(id)
 
 async def main():

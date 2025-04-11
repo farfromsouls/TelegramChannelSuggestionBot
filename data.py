@@ -21,7 +21,7 @@ photo TEXT,
 last_message TEXT)''')
 
 
-def check_id(id):
+async def check_id(id):
     cursor.execute('SELECT id FROM Users WHERE id = ?', (id,))
     try:
         id = cursor.fetchone()[0]
@@ -29,12 +29,12 @@ def check_id(id):
         return 0
 
 
-def set_id(id):
+async def set_id(id):
     cursor.execute('INSERT INTO Users (id) VALUES(?)', (id,))
     conn.commit()
 
 
-def get_lm(id):
+async def get_lm(id):
     cursor.execute('SELECT last_command FROM Users WHERE id = ?', (id,))
     lm = cursor.fetchone()[0]
     return lm
@@ -43,6 +43,17 @@ def get_lm(id):
 async def set_lm(id, text):
     cursor.execute('UPDATE Users SET last_command = ? WHERE id = ?', (text, id))
     conn.commit()
+
+
+async def set_ia(id, val):
+    cursor.execute('UPDATE Users SET is_asking = ? WHERE id = ?', (val, id))
+    conn.commit()
+
+
+async def get_ia(id):
+    cursor.execute('SELECT is_asking FROM Users WHERE id = ?', (id,))
+    ia = cursor.fetchone()[0]
+    return ia
 
 
 async def set_lastchm(id, text):
@@ -110,29 +121,27 @@ async def get_lastchm(id):
     return lastchm
 
 
-async def Announc(brend, name, overview, price):
+async def Announc(brend, name, overview, price, toAdmin=False):
     global textmess
     textmess = (f'Бренд: {brend} \n'
                  f'Название: {name} \n'
                  f'Описание: {overview} \n'
-                 f'Цена: {price} \n\n\n'
-                 f'Хотите внести изменения? \n')
+                 f'Цена: {price} \n\n\n')
+    if toAdmin == False:
+        textmess = textmess + f'Хотите внести изменения? \n'
     return textmess
 
 async def changes(id, text, message):   
     lastchm = await get_lastchm(id)
     
     if lastchm == "Бренд":
-        await set_brand(id, text)     
+        await set_brand(id, text)
     elif lastchm == "Название":
         await set_name(id, text)  
     elif lastchm == "Описание":
         await set_ove(id, text) 
     elif lastchm == "Цена":
-        await set_price(id, text) 
-    elif lastchm == "Оставить анкету такой✅":
-        #функ для отправки админу
-        print("ян лох")
+        await set_price(id, text)
     
     if lastchm in ["Бренд", "Название", "Описание", "Цена"]:
         photo_file = FSInputFile(await get_photo(id))
