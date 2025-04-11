@@ -34,43 +34,43 @@ async def handler(message: types.Message):
 
     if get_lm(id) == None:
         await set_brand(id, text)
-        await bot.send_message(id, "Напиши название чмо")
-        await set_lm(id, "Напиши название чмо")
+        await bot.send_message(id, "Напишите название")
+        await set_lm(id, "Напишите название")
 
-    elif get_lm(id) == "Напиши название чмо":
+    elif get_lm(id) == "Напишите название":
         await set_name(id, text)
-        await bot.send_message(id, "Напиши описание чмо")
-        await set_lm(id, "Напиши описание чмо")
+        await bot.send_message(id, "Напишите описание")
+        await set_lm(id, "Напишите описание")
 
-    elif get_lm(id) == "Напиши описание чмо":
+    elif get_lm(id) == "Напишите описание":
         await set_ove(id, text)
-        await bot.send_message(id, "Напиши цену товара")
-        await set_lm(id, "Напиши цену товара")
+        await bot.send_message(id, "Напишите цену")
+        await set_lm(id, "Напишите цену")
 
-    elif get_lm(id) == "Напиши цену товара":
+    elif get_lm(id) == "Напишите цену":
         await set_price(id, text)
-        await bot.send_message(id, "Пришли фото хоточкэ :3 <3")
-        await set_lm(id, "Пришли фото хоточкэ :3 <3")
+        await bot.send_message(id, "Пришлите фото")
+        await set_lm(id, "Пришлите фото")
 
     elif text == "Бренд":
         await set_lastchm(id, text)
-        await bot.send_message(id, "Напиши бренд")
+        await bot.send_message(id, "Напишите бренд")
 
     elif text == "Название":
         await set_lastchm(id, text)
-        await bot.send_message(id, "Напиши название")
+        await bot.send_message(id, "Напишите название")
 
     elif text == "Описание":
         await set_lastchm(id, text)
-        await bot.send_message(id, "Напиши описание")
+        await bot.send_message(id, "Напишите описание")
 
     elif text == "Цена":
         await set_lastchm(id, text)
-        await bot.send_message(id, "Напиши цену")
+        await bot.send_message(id, "Напишите цену")
 
     elif text == "Фото":
         await set_lastchm(id, text)
-        await bot.send_message(id, "Пришли нью фоточкэ")
+        await bot.send_message(id, "Пришлите фото")
 
     else:
         await changes(id, text, message)
