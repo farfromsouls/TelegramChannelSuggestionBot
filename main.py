@@ -4,7 +4,8 @@ from aiogram.types import FSInputFile
 from aiogram.filters.command import Command
 
 from data import *
-from secret import token, admin_id
+from admin import *
+from secret import token, admin_id, CHAT_ID
 from buttons import testbtn, adminbutt
 
 import asyncio
@@ -32,8 +33,32 @@ async def handler(message: types.Message):
     if await get_ia(id) == 1:
         return None
     
-    lastm = await get_lm(id)
+    if id == admin_id:
+        if text == "✅":
+            new_request = await check_bd()
+            chanel_mes = await FirstTipochek(new_request)
+            photo = FSInputFile(chanel_mes[1])
+            await bot.send_photo(chat_id=CHAT_ID, photo=photo, caption=chanel_mes[0])
+            await delete_user(new_request)
+            os.remove(chanel_mes[1])
 
+            if await get_alen_users() != 0:
+                new_request = await check_bd()
+                chanel_mes = await FirstTipochek(new_request)
+
+        elif text == "❌":
+            new_request = await check_bd()
+            chanel_mes = await FirstTipochek(new_request)
+            await delete_user(new_request)
+            os.remove(chanel_mes[1])
+            if await get_alen_users() != 0:
+                new_request = await check_bd()
+                chanel_mes = await FirstTipochek(new_request)
+            
+        else:
+            return None
+    
+    lastm = await get_lm(id)
     if lastm == None:
         await set_brand(id, text)
         await bot.send_message(id, "Напишите название")
@@ -76,10 +101,12 @@ async def handler(message: types.Message):
 
     elif text == "Оставить анкету такой✅":
         await bot.send_message(id, "Ваша заявка обрабатывается")
-        post = await Announc(get_brand(id), get_name(id), get_overview(id), get_price(id), True)
-        photo_file = FSInputFile(await get_photo(id))
-        await bot.send_photo(chat_id=admin_id, photo=photo_file, reply_markup=adminbutt, caption=post)
         await set_ia(id, 1)
+        
+        if await get_alen_users() == 1:
+            post = await Announc(get_brand(id), get_name(id), get_overview(id), get_price(id), True)
+            photo_file = FSInputFile(await get_photo(id))
+            await bot.send_photo(chat_id=admin_id, photo=photo_file, reply_markup=adminbutt, caption=post)
 
     else:
         await changes(id, text, message)

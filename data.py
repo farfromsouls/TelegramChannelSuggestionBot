@@ -1,5 +1,4 @@
 import sqlite3
-import datetime
 from aiogram.types import FSInputFile
 from buttons import testbtn
 
@@ -34,6 +33,11 @@ async def set_id(id):
     conn.commit()
 
 
+async def delete_user(id):
+    cursor.execute('DELETE FROM Users WHERE id = ?', (id,))
+    conn.commit()
+
+
 async def get_lm(id):
     cursor.execute('SELECT last_command FROM Users WHERE id = ?', (id,))
     lm = cursor.fetchone()[0]
@@ -54,6 +58,14 @@ async def get_ia(id):
     cursor.execute('SELECT is_asking FROM Users WHERE id = ?', (id,))
     ia = cursor.fetchone()[0]
     return ia
+
+
+async def get_alen_users():
+    cursor.execute('SELECT id FROM Users WHERE is_asking = ?', (1,))
+    if cursor.fetchone() == None:
+        return 0
+    a_users = len(cursor.fetchone())
+    return a_users
 
 
 async def set_lastchm(id, text):
@@ -80,6 +92,10 @@ async def set_price(id, text):
     cursor.execute('UPDATE Users SET price = ? WHERE id = ?', (text, id))
     conn.commit()
 
+async def get_a_user():
+    cursor.execute('SELECT id FROM Users WHERE is_asking = ?', (1,))
+    a_user = cursor.fetchone()[0]
+    return a_user
 
 def get_brand(id):
     cursor.execute('SELECT brand FROM Users WHERE id = ?', (id,))
