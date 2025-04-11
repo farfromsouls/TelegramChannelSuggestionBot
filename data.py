@@ -130,7 +130,7 @@ async def changes(id, text, message):
         await set_ove(id, text) 
     elif lastchm == "Цена":
         await set_price(id, text) 
-    elif lastchm == "Оставить анкету такой":
+    elif lastchm == "Оставить анкету такой✅":
         #функ для отправки админу
         print("ян лох")
     
