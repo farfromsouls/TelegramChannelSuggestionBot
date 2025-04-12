@@ -40,6 +40,8 @@ async def handler(message: types.Message):
             photo = FSInputFile(chanel_mes[1])
             ChatFullInfo = await bot.get_chat(new_request)
             ChatFullInfo = ChatFullInfo.username
+            if ChatFullInfo == None:
+                ChatFullInfo = 'Hidden'
             await bot.send_photo(chat_id=CHAT_ID, photo=photo, caption=chanel_mes[0] + "\nПродавец: @" + ChatFullInfo)
             await delete_user(new_request)
             os.remove(chanel_mes[1])
