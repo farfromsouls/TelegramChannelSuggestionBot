@@ -1,15 +1,15 @@
 import os
+import asyncio
+import logging
+
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.types import FSInputFile
 from aiogram.filters.command import Command
 
 from data import *
 from admin import *
-from secret import token, admin_id, CHAT_ID
-from buttons import testbtn, adminbutt
-
-import asyncio
-import logging
+from secret import *
+from buttons import *
 
 
 logging.basicConfig(level=logging.INFO)
@@ -19,7 +19,7 @@ dp = Dispatcher()
 
 @dp.message(Command("start"))
 async def cmd_start(message: types.Message):
-    await message.answer("Здравствуйте напишите бренд")
+    await message.answer("Здравствуйте! Напишите бренд")
 
 
 @dp.message(F.text)
@@ -34,44 +34,48 @@ async def handler(message: types.Message):
         return None
     
     if id == admin_id:
+
         if text == "✅":
             new_request = await check_bd()
             chanel_mes = await FirstTipochek(new_request)
+
             photo = FSInputFile(chanel_mes[1])
             ChatFullInfo = await bot.get_chat(new_request)
             ChatFullInfo = ChatFullInfo.username
             if ChatFullInfo == None:
                 ChatFullInfo = 'Hidden'
-            await bot.send_photo(chat_id=CHAT_ID, photo=photo, caption=chanel_mes[0] + "\nПродавец: @" + ChatFullInfo)
+            caption = chanel_mes[0] + "\nПродавец: @" + ChatFullInfo
+            await bot.send_photo(chat_id=CHAT_ID, photo=photo, caption=caption)
+
             await delete_user(new_request)
             os.remove(chanel_mes[1])
             await bot.send_message(new_request, "Ваша заявка принята!!! :)")
 
             if await get_alen_users() != 0:
                 new_request = await check_bd()
-                print(f'{new_request}'+"ЭТО В МЕИНЕ В ГАЛОЧКЭ")
                 chanel_mes = await FirstTipochek(new_request)
                 photo = FSInputFile(chanel_mes[1])
             
-                await bot.send_photo(chat_id=admin_id, photo=photo, reply_markup=adminbutt, caption=chanel_mes[0])
+                await bot.send_photo(chat_id=admin_id, photo=photo, reply_markup=adminbtn, caption=chanel_mes[0])
                 
-        
-
         elif text == "❌":
             new_request = await check_bd()
             chanel_mes = await FirstTipochek(new_request)
+
             await delete_user(new_request)
             os.remove(chanel_mes[1])
+
             if await get_alen_users() != 0:
                 new_request = await check_bd()
                 chanel_mes = await FirstTipochek(new_request)
             await bot.send_message(new_request, "Ваша заявка отклонена!!! :(")
             
-            
-        
         return None
     
+
     lastm = await get_lm(id)
+
+    # first try
     if lastm == None:
         await set_brand(id, text)
         await bot.send_message(id, "Напишите название")
@@ -92,6 +96,7 @@ async def handler(message: types.Message):
         await bot.send_message(id, "Пришлите фото")
         await set_lm(id, "Пришлите фото")
 
+    # changes
     elif text == "Бренд":
         await set_lastchm(id, text)
         await bot.send_message(id, "Напишите бренд")
@@ -122,13 +127,11 @@ async def handler(message: types.Message):
             post = await Announc(get_brand(id), get_name(id), get_overview(id), get_price(id), True)
             photo_file = FSInputFile(await get_photo(id))
 
-            await bot.send_photo(chat_id=admin_id, photo=photo_file, reply_markup=adminbutt, caption=post)
-
+            await bot.send_photo(chat_id=admin_id, photo=photo_file, reply_markup=adminbtn, caption=post)
 
     else:
         await changes(id, text, message)
     
-
 
 @dp.message(F.photo)
 async def download_photo(message: types.Message):
@@ -153,6 +156,7 @@ async def download_photo(message: types.Message):
     photo_file = FSInputFile(dest)
     await message.answer_photo(photo=photo_file, reply_markup=testbtn, caption=text)
     await get_lastchm(id)
+
 
 async def main():
     await dp.start_polling(bot)

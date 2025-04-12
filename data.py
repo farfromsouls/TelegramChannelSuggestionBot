@@ -2,11 +2,10 @@ import sqlite3
 from aiogram.types import FSInputFile
 from buttons import testbtn
 
-# connecting to db
+
 db_path = 'db.sqlite3'
 conn = sqlite3.connect(db_path)
 cursor = conn.cursor()
-
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS Users (
 id INTEGER PRIMARY KEY,
@@ -16,13 +15,9 @@ name TEXT,
 brand TEXT,
 price INTEGER,
 description TEXT,
-photo TEXT,
+photo TEXT,async 
 last_message TEXT,
-index_lol INTEGER)''')
-
-
-
-
+index_lol INTEGER )''')
 
 
 async def max_index():
@@ -43,14 +38,12 @@ async def min_index():
     return min_ind
 
 
-
-
 async def check_id(id):
     cursor.execute('SELECT id FROM Users WHERE id = ?', (id,))
-    try:
-        id = cursor.fetchone()[0]
-    except:
-        return 0
+    id = cursor.fetchone()[0]
+    if id != None:
+        return id
+    return 0
 
 
 async def set_id(id):
@@ -91,6 +84,7 @@ async def get_alen_users():
     
     if spisok == None:
         return 0
+    
     a_users = len(spisok)
     return a_users
 
@@ -129,36 +123,34 @@ async def get_a_user():
     min_tip = await min_index()
     cursor.execute('SELECT id FROM Users WHERE index_lol = ? ', (min_tip,))
     tip = cursor.fetchone()[0] 
-    print(tip)
     return tip
     
 
-
-def get_brand(id):
+async def get_brand(id):
     cursor.execute('SELECT brand FROM Users WHERE id = ?', (id,))
     brand = cursor.fetchone()[0]
     return brand
 
 
-def get_ind(id):
+async def get_ind(id):
     cursor.execute('SELECT index_lol FROM Users WHERE id = ?', (id,))
     indll = cursor.fetchone()[0]
     return indll
 
 
-def get_name(id):
+async def get_name(id):
     cursor.execute('SELECT name FROM Users WHERE id = ?', (id,))
     name = cursor.fetchone()[0]
     return name
 
 
-def get_overview(id):
+async def get_overview(id):
     cursor.execute('SELECT description FROM Users WHERE id = ?', (id,))
     overview = cursor.fetchone()[0]
     return overview
 
 
-def get_price(id):
+async def get_price(id):
     cursor.execute('SELECT price FROM Users WHERE id = ?', (id,))
     price = cursor.fetchone()[0]
     return price
@@ -203,7 +195,12 @@ async def changes(id, text, message):
         await set_price(id, text)
     
     if lastchm in ["Бренд", "Название", "Описание", "Цена"]:
+
         photo_file = FSInputFile(await get_photo(id))
-        text = await Announc(get_brand(id), get_name(id), get_overview(id), get_price(id))
+        brand = await get_brand(id)
+        name = await get_name(id)
+        overview = await get_overview(id)
+        price = await get_brand(id)
+        
+        text = await Announc(brand, name, overview, price)
         await message.answer_photo(photo=photo_file, reply_markup=testbtn, caption=text)
-            

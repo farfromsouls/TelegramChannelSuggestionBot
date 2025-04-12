@@ -1,23 +1,22 @@
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 
-test1 = KeyboardButton(text="Бренд")
-test2 = KeyboardButton(text="Название")
-test3 = KeyboardButton(text="Описание")
-test4 = KeyboardButton(text="Цена")
-test5 = KeyboardButton(text="Фото")
-test6 = KeyboardButton(text="Оставить анкету такой✅")
+brand = KeyboardButton(text="Бренд")
+name = KeyboardButton(text="Название")
+des = KeyboardButton(text="Описание")
+price = KeyboardButton(text="Цена")
+photo = KeyboardButton(text="Фото")
+exit = KeyboardButton(text="Оставить анкету такой✅")
 
-testbtn = ReplyKeyboardMarkup(keyboard=[
-    [test1, test2],
-    [test3, test4],
-    [test5, test6]
+userbtn = ReplyKeyboardMarkup(keyboard=[
+    [brand, name],
+    [des, price],
+    [photo, exit]
 ], resize_keyboard=True)
 
-
-no = KeyboardButton(text="❌")
 yes = KeyboardButton(text="✅")
+no = KeyboardButton(text="❌")
 
-adminbutt = ReplyKeyboardMarkup(keyboard=[
+adminbtn = ReplyKeyboardMarkup(keyboard=[
     [yes, no]
 ], resize_keyboard=True)
