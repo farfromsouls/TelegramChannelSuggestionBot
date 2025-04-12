@@ -38,13 +38,22 @@ async def handler(message: types.Message):
             new_request = await check_bd()
             chanel_mes = await FirstTipochek(new_request)
             photo = FSInputFile(chanel_mes[1])
-            await bot.send_photo(chat_id=CHAT_ID, photo=photo, caption=chanel_mes[0])
+            ChatFullInfo = await bot.get_chat(new_request)
+            ChatFullInfo = ChatFullInfo.username
+            await bot.send_photo(chat_id=CHAT_ID, photo=photo, caption=chanel_mes[0] + "\nПродавец: @" + ChatFullInfo)
             await delete_user(new_request)
             os.remove(chanel_mes[1])
+            await bot.send_message(new_request, "Ваша заявка принята!!! :)")
 
             if await get_alen_users() != 0:
                 new_request = await check_bd()
+                print(f'{new_request}'+"ЭТО В МЕИНЕ В ГАЛОЧКЭ")
                 chanel_mes = await FirstTipochek(new_request)
+                photo = FSInputFile(chanel_mes[1])
+            
+                await bot.send_photo(chat_id=admin_id, photo=photo, reply_markup=adminbutt, caption=chanel_mes[0])
+                
+        
 
         elif text == "❌":
             new_request = await check_bd()
@@ -54,9 +63,11 @@ async def handler(message: types.Message):
             if await get_alen_users() != 0:
                 new_request = await check_bd()
                 chanel_mes = await FirstTipochek(new_request)
+            await bot.send_message(new_request, "Ваша заявка отклонена!!! :(")
             
-        else:
-            return None
+            
+        
+        return None
     
     lastm = await get_lm(id)
     if lastm == None:
@@ -100,13 +111,17 @@ async def handler(message: types.Message):
         await bot.send_message(id, "Пришлите фото")
 
     elif text == "Оставить анкету такой✅":
-        await bot.send_message(id, "Ваша заявка обрабатывается")
+        await bot.send_message(id, "Ваша заявка обрабатывается",reply_markup=types.ReplyKeyboardRemove())
+        
         await set_ia(id, 1)
+        await set_ind(id)
         
         if await get_alen_users() == 1:
             post = await Announc(get_brand(id), get_name(id), get_overview(id), get_price(id), True)
             photo_file = FSInputFile(await get_photo(id))
+
             await bot.send_photo(chat_id=admin_id, photo=photo_file, reply_markup=adminbutt, caption=post)
+
 
     else:
         await changes(id, text, message)

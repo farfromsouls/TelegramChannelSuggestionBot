@@ -17,7 +17,32 @@ brand TEXT,
 price INTEGER,
 description TEXT,
 photo TEXT,
-last_message TEXT)''')
+last_message TEXT,
+index_lol INTEGER)''')
+
+
+
+
+
+
+async def max_index():
+    cursor.execute('SELECT MAX(index_lol) FROM Users ')
+    max_ind=cursor.fetchone()[0]
+    print(max_ind)
+    if max_ind == None:
+        return 0
+    return max_ind
+
+
+async def min_index():
+    cursor.execute('SELECT MIN(index_lol) FROM Users ')
+    min_ind=cursor.fetchone()[0]
+    print(min_ind)
+    if min_ind == None:
+        return 0
+    return min_ind
+
+
 
 
 async def check_id(id):
@@ -62,9 +87,11 @@ async def get_ia(id):
 
 async def get_alen_users():
     cursor.execute('SELECT id FROM Users WHERE is_asking = ?', (1,))
-    if cursor.fetchone() == None:
+    spisok=cursor.fetchall()
+    
+    if spisok == None:
         return 0
-    a_users = len(cursor.fetchone())
+    a_users = len(spisok)
     return a_users
 
 
@@ -75,6 +102,11 @@ async def set_lastchm(id, text):
 
 async def set_brand(id, text):
     cursor.execute('UPDATE Users SET brand = ? WHERE id = ?', (text, id))
+    conn.commit()
+
+
+async def set_ind(id):
+    cursor.execute('UPDATE Users SET index_lol = ? WHERE id = ?',( await max_index() + 1, id))
     conn.commit()
 
 
@@ -92,15 +124,26 @@ async def set_price(id, text):
     cursor.execute('UPDATE Users SET price = ? WHERE id = ?', (text, id))
     conn.commit()
 
+
 async def get_a_user():
-    cursor.execute('SELECT id FROM Users WHERE is_asking = ?', (1,))
-    a_user = cursor.fetchone()[0]
-    return a_user
+    min_tip = await min_index()
+    cursor.execute('SELECT id FROM Users WHERE index_lol = ? ', (min_tip,))
+    tip = cursor.fetchone()[0] 
+    print(tip)
+    return tip
+    
+
 
 def get_brand(id):
     cursor.execute('SELECT brand FROM Users WHERE id = ?', (id,))
     brand = cursor.fetchone()[0]
     return brand
+
+
+def get_ind(id):
+    cursor.execute('SELECT index_lol FROM Users WHERE id = ?', (id,))
+    indll = cursor.fetchone()[0]
+    return indll
 
 
 def get_name(id):
@@ -142,7 +185,7 @@ async def Announc(brend, name, overview, price, toAdmin=False):
     textmess = (f'Бренд: {brend} \n'
                  f'Название: {name} \n'
                  f'Описание: {overview} \n'
-                 f'Цена: {price} \n\n\n')
+                 f'Цена: {price} \n')
     if toAdmin == False:
         textmess = textmess + f'Хотите внести изменения? \n'
     return textmess
