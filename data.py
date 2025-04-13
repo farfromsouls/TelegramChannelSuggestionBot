@@ -200,7 +200,7 @@ async def changes(id, text, message):
         brand = await get_brand(id)
         name = await get_name(id)
         overview = await get_overview(id)
-        price = await get_brand(id)
+        price = await get_price(id)
         
         text = await Announc(brand, name, overview, price)
         await message.answer_photo(photo=photo_file, reply_markup=userbtn, caption=text)

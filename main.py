@@ -131,7 +131,7 @@ async def handler(message: types.Message):
             brand = await get_brand(id)
             name = await get_name(id)
             overview = await get_overview(id)
-            price = await get_brand(id)
+            price = await get_price(id)
 
             post = await Announc(brand, name, overview, price, True)
             photo_file = FSInputFile(await get_photo(id))
@@ -165,7 +165,7 @@ async def download_photo(message: types.Message):
     brand = await get_brand(id)
     name = await get_name(id)
     overview = await get_overview(id)
-    price = await get_brand(id)
+    price = await get_price(id)
 
     text = await Announc(brand, name, overview, price)
     photo_file = FSInputFile(dest)
