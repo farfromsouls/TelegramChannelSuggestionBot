@@ -43,11 +43,11 @@ async def handler(message: types.Message):
             ChatFullInfo = await bot.get_chat(new_request)
             ChatFullInfo =ChatFullInfo.username
             if ChatFullInfo == None:
-                ChatFullInfo = 'Hidden'
+                ChatFullInfo = ' не оставил контактных данных'
             else:
-                ChatFullInfo = '@' + ChatFullInfo
+                ChatFullInfo = ': @' + ChatFullInfo
 
-            caption = chanel_mes[0] + "\nПродавец:" + ChatFullInfo
+            caption = chanel_mes[0] + "\nПродавец" + ChatFullInfo
             await bot.send_photo(chat_id=CHAT_ID, photo=photo, caption=caption)
 
             await delete_user(new_request)
