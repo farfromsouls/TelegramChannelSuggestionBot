@@ -203,4 +203,4 @@ async def changes(id, text, message):
         price = await get_brand(id)
         
         text = await Announc(brand, name, overview, price)
-        await message.answer_photo(photo=photo_file, reply_markup=testbtn, caption=text)
+        await message.answer_photo(photo=photo_file, reply_markup=userbtn, caption=text)

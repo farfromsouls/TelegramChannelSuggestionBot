@@ -169,7 +169,7 @@ async def download_photo(message: types.Message):
 
     text = await Announc(brand, name, overview, price)
     photo_file = FSInputFile(dest)
-    await message.answer_photo(photo=photo_file, reply_markup=testbtn, caption=text)
+    await message.answer_photo(photo=photo_file, reply_markup=userbtn, caption=text)
     await get_lastchm(id)
 
 
