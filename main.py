@@ -124,7 +124,13 @@ async def handler(message: types.Message):
         await set_ind(id)
         
         if await get_alen_users() == 1:
-            post = await Announc(get_brand(id), get_name(id), get_overview(id), get_price(id), True)
+            photo_file = FSInputFile(await get_photo(id))
+            brand = await get_brand(id)
+            name = await get_name(id)
+            overview = await get_overview(id)
+            price = await get_brand(id)
+
+            post = await Announc(brand, name, overview, price, True)
             photo_file = FSInputFile(await get_photo(id))
 
             await bot.send_photo(chat_id=admin_id, photo=photo_file, reply_markup=adminbtn, caption=post)
@@ -152,7 +158,13 @@ async def download_photo(message: types.Message):
     )
 
     await set_photo(id, dest)
-    text = await Announc(get_brand(id), get_name(id), get_overview(id), get_price(id))
+    photo_file = FSInputFile(await get_photo(id))
+    brand = await get_brand(id)
+    name = await get_name(id)
+    overview = await get_overview(id)
+    price = await get_brand(id)
+
+    text = await Announc(brand, name, overview, price)
     photo_file = FSInputFile(dest)
     await message.answer_photo(photo=photo_file, reply_markup=testbtn, caption=text)
     await get_lastchm(id)
