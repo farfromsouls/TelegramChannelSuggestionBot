@@ -13,6 +13,6 @@ async def FirstTipochek(id):
     overview = await get_overview(id)
     price = await get_brand(id)
 
-    text = await Announc(brand, name, overview, price)
+    text = await Announc(brand, name, overview, price, True)
     photo_file = await get_photo(id)
     return [text, photo_file]
