@@ -40,7 +40,7 @@ async def min_index():
 
 async def check_id(id):
     cursor.execute('SELECT id FROM Users WHERE id = ?', (id,))
-    id = cursor.fetchone()[0]
+    id = cursor.fetchone()
     if id != None:
         return id
     return 0
